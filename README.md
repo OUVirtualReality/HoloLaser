@@ -1,2 +1,0 @@
-# HoloLaser
-Laser Puzzle Game
