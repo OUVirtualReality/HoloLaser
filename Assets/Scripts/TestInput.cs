@@ -44,7 +44,7 @@ public class TestInput : MonoBehaviour {
             if (Physics.Raycast(ray, out hit))
             {
                 GameObject obj = FindTagInParents(hit.transform, "Moveable");
-                if (obj)
+                if (hit.transform.tag != "Dead Zone" && obj)
                 {
                     heldItem = obj;
                     foreach (Collider c in heldItem.GetComponentsInChildren<Collider>())
@@ -69,8 +69,7 @@ public class TestInput : MonoBehaviour {
 
             if (Physics.Raycast(ray, out hit))
             {
-                GameObject obj = FindTagInParents(hit.transform, "Moveable");
-                if (obj == null)
+                if (hit.transform.tag != "Dead Zone" && FindTagInParents(hit.transform, "Moveable") == null)
                 {
                     heldItem.transform.position = hit.point;
                 }
