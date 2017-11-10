@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LaserEmitter : MonoBehaviour {
-    
+
+    public Color LaserColor;
     GameObject laser;
 
     // Use this for initialization
@@ -17,7 +18,7 @@ public class LaserEmitter : MonoBehaviour {
 	void Update()
     {
         Vector3 fwd = transform.TransformDirection(Vector3.up);
-        Debug.DrawRay(transform.position, fwd, Color.green);
+        Debug.DrawRay(transform.position, fwd, LaserColor);
 
         RaycastHit hit;
         

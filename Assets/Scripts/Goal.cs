@@ -18,6 +18,6 @@ public class Goal : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// if hit send hit flag to game setup
+        
 	}
 }
