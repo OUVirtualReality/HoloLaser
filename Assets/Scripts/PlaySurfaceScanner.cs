@@ -11,9 +11,9 @@ using UnityEngine.XR;
 public class PlaySurfaceScanner : MonoBehaviour {
     /*These values are temporary and will be removed once this script 
     reaches parity with the new UnityEngine.XR namespace*/
-    private float unitLength = 0.305F;
-    private Vector3[][][] gridPoints;
-    private bool initializationComplete = false;
+    private static float unitLength = 0.305F;
+    private static Vector3[][][] gridPoints;
+    private static bool initializationComplete = false;
 
 	void Awake () {
         //Set Tracking Space to RoomScale. If successful the floor will be at y = 0.
@@ -57,13 +57,13 @@ public class PlaySurfaceScanner : MonoBehaviour {
 
     //This can be used to find out if the grid has been created. Can be useful if the user has
     //moved into a different environment since starting the program.
-    public bool checkInitializationComplete()
+    public static bool CheckInitializationComplete()
     {
         return initializationComplete;
     }
 
     //get the maximum values for grid points
-    public int[] getGridBounds()
+    public static int[] GetGridBounds()
     {
         int[] gridBounds = new int[3];
         gridBounds[0] = 10;
@@ -73,7 +73,7 @@ public class PlaySurfaceScanner : MonoBehaviour {
     }
 
     //given a grid space point (x,y,z) this will return a Vector3 world space point
-    public Vector3 getWorldPosition(int x, int y, int z)
+    public static Vector3 GetWorldPosition(int x, int y, int z)
     {
         //make sure the Vector3 is within the current grid. Otherwise throw an ArgumentException
         if ((x < 10 && x >= 0) && (y < 8 && y >= 0) && (z < 10 && z >= 0))
@@ -87,7 +87,7 @@ public class PlaySurfaceScanner : MonoBehaviour {
     }
 
     //given a grid space point Vector3 this will return a Vector3 world space point
-    public Vector3 getWorldPosition(Vector3 gridPosition)
+    public static Vector3 GetWorldPosition(Vector3 gridPosition)
     {
         int x, y, z;
         //make sure the Vector3 is composed of int values. Otherwise throw an ArgumentException
@@ -107,5 +107,43 @@ public class PlaySurfaceScanner : MonoBehaviour {
         {
             throw new System.ArgumentException("Grid points must be composed of int values.");
         }
+    }
+
+    //given a world space point (x,y,z) this will return  the closest point to it in grid space
+    public static Vector3 GetGridPosition(float x, float y, float z)
+    {
+        //initialize to a large value so that the first distance will likely be less
+        float leastDistance = float.MaxValue;
+        float temp = 0F;
+        int gridX = 0, gridY = 0, gridZ = 0;
+
+        //loop through all points and calculate distance to find the closet one
+        for (int set = 0; set < 10; ++set)
+        {
+            gridPoints[set] = new Vector3[8][];
+            for (int row = 0; row < 8; ++row)
+            {
+                gridPoints[set][row] = new Vector3[10];
+                for (int column = 0; column < 10; ++column)
+                {
+                    temp = Vector3.Distance(gridPoints[set][row][column], new Vector3(x, y, z));
+                    if (leastDistance > temp)
+                    {
+                        leastDistance = temp;
+                        gridX = set;
+                        gridY = row;
+                        gridZ = column;
+                    }
+                }
+            }
+        }
+
+        return new Vector3(gridX, gridY, gridZ);
+    }
+
+    //does the same as above, albeit with a Vector3
+    public static Vector3 GetGridPosition(Vector3 vector)
+    {
+        return GetGridPosition(vector.x, vector.y, vector.z);
     }
 }

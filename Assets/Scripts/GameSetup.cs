@@ -80,7 +80,7 @@ public class GameSetup : MonoBehaviour
             }
         }
         //if the PSS is done, then we can make the map using it's grid
-        else if (PlaySurfaceScanner.checkInitializationComplete())
+        else if (PlaySurfaceScanner.CheckInitializationComplete())
         {
             //we can make the map
             SetupWorld();
