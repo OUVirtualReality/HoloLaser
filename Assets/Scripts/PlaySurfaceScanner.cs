@@ -48,6 +48,7 @@ public class PlaySurfaceScanner : MonoBehaviour {
                 accZ -= unitLength;
             }
             /*Temporary Code ends here */
+            initializationComplete = true;
         }
         else
         {
